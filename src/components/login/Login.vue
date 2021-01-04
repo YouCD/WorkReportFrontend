@@ -1,7 +1,7 @@
 <template>
   <div class="form-con">
     <div style="padding-bottom: 50px">
-      <h1><center>印章账密管理系统</center> </h1>
+      <h1><center>WorkLog System</center> </h1>
     </div>
   <a-form
     id="components-form-demo-normal-login"
@@ -12,7 +12,7 @@
     <a-form-item>
       <a-input
         v-decorator="[
-          'uid',
+          'username',
           { rules: [{ required: true, message: '请输入用户名' }] },
         ]"
         placeholder="用户名：邮箱前缀"
@@ -45,11 +45,10 @@
 <!--        >-->
 <!--          记住我-->
 <!--        </a-checkbox>-->
-        <a class="login-form-changpwd" href="http://cucurbitcable.dlab.cn/#/updatepassword">
-          修改密码
-        </a>
-        <a class="login-form-forgot" href="http://cucurbitcable.dlab.cn/#/updatepassword" >忘记密码
-        </a>
+<!--        <a class="login-form-changpwd" href="http://cucurbitcable.dlab.cn/#/updatepassword">-->
+<!--          修改密码-->
+<!--        </a>-->
+<!--        <a class="login-form-forgot" href="http://cucurbitcable.dlab.cn/#/updatepassword" >忘记密码</a>-->
 
       <a-button type="primary" @click="handleSubmit" html-type="submit" class="login-form-button">
         Go
@@ -75,11 +74,8 @@ import {Login} from '../api/user'
             Login(values).then(res => {
               if (res.data.flag) {
                 this.$message.success(res.data.msg);
-                // console.log(res.data.data.token)
-                // console.log(res.data.data.)
                 localStorage.setItem('jwt', res.data.data.token);
-                localStorage.setItem('uid', values.uid);
-                localStorage.setItem('role', res.data.data.role);
+                localStorage.setItem('uid', res.data.data.uid);
                 //获取回跳的redirect地址
                 const redirect = this.$route.query.redirect;
                 if (redirect) {

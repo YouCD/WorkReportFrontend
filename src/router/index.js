@@ -44,26 +44,53 @@ const router = new Router({
                 // },
             ]
         },
+        {
+            path: '/',
+            name: 'sys',
+            component: Layout,
+            meta: {needLogin: true, title: 'sys'},
+            children: [
+                // {
+                //     path: '/workLogAdd',
+                //     name: 'Roles',
+                //     component: () => import(/* webpackChunkName: "seal" */ "@/components/workLog/workLogList.vue"),
+                //     meta: {needLogin: true, title: 'Roles'}
+                // },
+                {
+                    path: '/sys/sysDic',
+                    name: 'sysDic',
+                    component: () => import(/* webpackChunkName: "seal" */ "@/components/sys/sysDic.vue"),
+                    meta: {needLogin: true, title: 'workLogList'}
+                },
+
+                // {
+                //     path: '/rbac/user',
+                //     name: 'User',
+                //     component: () => import(/* webpackChunkName: "seal" */ "@/components/Rbac/User.vue"),
+                //     meta: {needLogin: true, title: 'User'}
+                // },
+            ]
+        },
 
 
     ],
 });
 
-// router.beforeEach((to, from, next) => {
-//   if (to.meta.needLogin) {
-//     if (localStorage.jwt) {
-//       next()
-//     } else {
-//       next({
-//         path: '/login',
-//         query: {redirect: to.fullPath} // 将跳转的路由path作为参数，登录成功后跳转到该路由
-//       })
-//
-//     }
-//   } else {
-//     next()
-//   }
-// });
+router.beforeEach((to, from, next) => {
+    if (to.meta.needLogin) {
+        if (localStorage.jwt) {
+            next()
+        } else {
+            next({
+                path: '/login',
+                query: {redirect: to.fullPath} // 将跳转的路由path作为参数，登录成功后跳转到该路由
+            })
+
+        }
+    } else {
+        next()
+    }
+});
 
 export default router
 //

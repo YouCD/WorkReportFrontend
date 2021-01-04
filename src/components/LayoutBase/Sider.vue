@@ -20,7 +20,7 @@
         <router-link to='/'>Home</router-link>
 
       </a-menu-item>
-      <a-sub-menu v-if="isSecretAdmin">
+      <a-sub-menu>
           <span slot="title">
 <!--            <a-icon type="user"/>-->
                         <span>日志</span>
@@ -41,6 +41,18 @@
 <!--        </a-menu-item>-->
 
       </a-sub-menu>
+<a-sub-menu >
+          <span slot="title">
+<!--            <a-icon type="user"/>-->
+                        <span>系统设置</span>
+
+          </span>
+        <a-menu-item key="/sys/sysDic">
+          <router-link to='/sys/sysDic'>字典设置</router-link>
+        </a-menu-item>
+
+
+      </a-sub-menu>
 
 
     </a-menu>
@@ -56,8 +68,6 @@ export default {
   },
   data() {
     return {
-      isSecretAdmin: true,
-      isSealAdmin: false
     }
   },
   name: "sider",

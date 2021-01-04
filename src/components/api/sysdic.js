@@ -1,9 +1,9 @@
 import request from "../utils/request"
 
 // 用户登入
-export function Login(params) {
+export function addWorkType(params) {
   return request({
-    url: '/login',
+    url: '/w/workType',
     data:params,
     method: 'POST',
   })

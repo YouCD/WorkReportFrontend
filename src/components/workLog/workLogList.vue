@@ -1,13 +1,46 @@
 <template>
   <div>
     <div>
-      <a-button type="primary" @click="showAddWorkLogModal">
-        添加日志
-      </a-button>
+
+<!--      <a-button type="primary" @click="showAddWorkLogModal">-->
+<!--        添加日志-->
+<!--      </a-button>-->
+
+
+      <a-form-model layout="inline" :model="form" :rules="rules" ref="ruleForm">
+        <a-form-model-item label="日期" prop="date">
+          <a-date-picker style="width: 130px" :defaultValue="moment(getCurrentData(), 'YYYY-MM-DD')" v-model="form.date"
+                         :locale="locale"/>
+        </a-form-model-item>
+
+        <a-form-model-item label="工作大类" prop="type1">
+          <a-select style="width: 160px" placeholder="请选择工作大类" v-model="form.type1" @change="addWorkLogType1Change">
+            <a-select-option v-for="(item,index) in type1List" :value="item.id" :key="index">
+              {{ item.description }}
+            </a-select-option>
+          </a-select>
+        </a-form-model-item>
+        <a-form-model-item label="工作子类" prop="type2">
+          <a-select style="width: 160px" placeholder="请选择工作子类" v-model="form.type2">
+            <a-select-option v-for="(item,index) in type2List" :value="item.id" :key="index">
+              {{ item.description }}
+            </a-select-option>
+          </a-select>
+        </a-form-model-item>
+        <a-form-model-item label="工作内容" prop="content">
+          <a-input style="width: 300px" v-model="form.content"/>
+        </a-form-model-item>
+        <a-form-model-item>
+          <a-button type="primary" @click="addWorkLogHandler">
+            添加
+          </a-button>
+        </a-form-model-item>
+      </a-form-model>
+
 
 
     </div>
-    <div>
+    <div style="padding-top: 15px">
       <a-table :columns="columns" :data-source="data" :rowKey='(record,index)=> index' :loading="loading">
 
 
@@ -21,9 +54,9 @@
               <a-divider type="vertical"/>
 
               <a-popconfirm title="确认删除该记录"
-                           ok-text="确认"
-                           cancel-text="取消"
-                           @confirm="confirmDelete(record)"
+                            ok-text="确认"
+                            cancel-text="取消"
+                            @confirm="confirmDelete(record)"
               >
                        <a href="#">删除</a>
               </a-popconfirm>
@@ -83,12 +116,14 @@
         </a-form-model>
       </a-modal>
     </div>
+
+
   </div>
 </template>
 
 <script>
 import moment from "moment"
-import {addWorkLog, getWorkLog, getWorkType1, getWorkType2, modifyWorkLog,delWorkLog} from "../api/worklog"
+import {addWorkLog, delWorkLog, getWorkLog, getWorkType1, getWorkType2, modifyWorkLog} from "../api/worklog"
 import locale from "ant-design-vue/lib/date-picker/locale/zh_CN";
 
 const columns = [
@@ -292,11 +327,9 @@ export default {
     },
 
 
-
-
-    confirmDelete(record){
+    confirmDelete(record) {
       let params = {
-        id:record.id
+        id: record.id
       }
       delWorkLog(params).then(res => {
         if (res.data.flag) {
