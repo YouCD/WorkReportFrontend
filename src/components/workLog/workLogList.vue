@@ -250,6 +250,7 @@ export default {
               this.$message.success(res.data.msg)
               // this.getSealsHanler()
               // this.showSealAdd = false;
+              this.getWorkLogHandler()
             } else if (res.data.flag !== true) {
               this.$message.error(res.data.msg)
             }
