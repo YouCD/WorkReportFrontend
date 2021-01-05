@@ -1,12 +1,6 @@
 <template>
   <div>
     <div>
-
-<!--      <a-button type="primary" @click="showAddWorkLogModal">-->
-<!--        添加日志-->
-<!--      </a-button>-->
-
-
       <a-form-model layout="inline" :model="form" :rules="rules" ref="ruleForm">
         <a-form-model-item label="日期" prop="date">
           <a-date-picker style="width: 130px" :defaultValue="moment(getCurrentData(), 'YYYY-MM-DD')" v-model="form.date"
@@ -45,12 +39,7 @@
 
 
         <span slot="action" slot-scope="record">
-<!--              <a @click="showSealInfo(record)">查看</a>-->
-          <!--              <a-divider type="vertical"/>-->
               <a @click="showWorkLogEdit(record)">编辑</a>
-          <!--              <a-divider type="vertical"/>-->
-          <!--              <a @click="showSealInvalid(record)"-->
-          <!--                 :disabled='record.newspaper_name!==""&&record.newspaper_time!==0'>作废</a>-->
               <a-divider type="vertical"/>
 
               <a-popconfirm title="确认删除该记录"
@@ -196,7 +185,7 @@ export default {
         type1: undefined,
         type2: undefined,
         content: undefined,
-        date: moment(this.getCurrentData(), 'YYYY-MM-DD'),
+        date: undefined,
       },
     };
   },
@@ -285,6 +274,7 @@ export default {
       this.editForm.type1 = record.type1_id
       this.editForm.type2 = record.type2_id
       this.editForm.content = record.content
+      this.editForm.date = moment.unix(record.date)
       let params = {
         pid: record.type1_id
       }
