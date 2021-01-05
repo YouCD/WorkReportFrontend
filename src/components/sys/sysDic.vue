@@ -2,43 +2,78 @@
   <div>
     <div>
       <div>
-        <a-form-model layout="inline" :model="Type1Data" :rules="rules" ref="ruleForm">
-          <a-form-model-item prop="Type1">
-            <a-input v-model="Type1Data.Type1" placeholder="请输入工作大类"/>
-          </a-form-model-item>
+        <div>
+          <div style="float: left">
+            <a-form-model layout="inline" :model="Type1Data" :rules="rules" ref="ruleForm">
+              <a-form-model-item prop="Type1">
+                <a-input v-model="Type1Data.Type1" placeholder="请输入工作大类"/>
+              </a-form-model-item>
 
-          <a-form-model-item>
-            <a-button style="margin-right: 10px" @click="Type1AddHandleOk" type="primary">
-              添加工作大类
-            </a-button>
-          </a-form-model-item>
-        </a-form-model>
+              <a-form-model-item>
+                <a-button style="margin-right: 10px" @click="Type1AddHandleOk" type="primary">
+                  添加工作大类
+                </a-button>
+              </a-form-model-item>
+            </a-form-model>
+          </div>
+          <div>
+            <a-form-model layout="inline" :model="Type2Data" :rules="rules1" ref="ruleForm2">
+              <a-form-model-item prop="pid">
+                <a-select style="width: 150px" placeholder="请选择工作大类" v-model="Type2Data.pid">
+                  <a-select-option v-for="(item,index) in type1List" :value="item.id" :key="index">
+                    {{ item.description }}
+                  </a-select-option>
+                </a-select>
+              </a-form-model-item>
+
+              <a-form-model-item prop="description">
+                <a-input v-model="Type2Data.description" placeholder="请输入工作子类"/>
+              </a-form-model-item>
+
+              <a-form-model-item>
+                <a-button style="margin-right: 10px" @click="Type2AddHandleOk" type="primary">
+                  添加工作子类
+                </a-button>
+              </a-form-model-item>
+            </a-form-model>
+          </div>
+        </div>
+        <div style="max-height: 80vh;overflow-y: auto;width: 25%">
+
+          <a-tree
+              v-if="treeData.length>0"
+              :treeData="treeData"
+              :defaultExpandParent="true"
+          ></a-tree>
+
+          <!--          <a-card :bordered="false" @click="clearMenu" class="card-box">-->
+          <!--            <a-tree-->
+          <!--                v-if="treeData.length>0"-->
+          <!--                :treeData="treeData"-->
+          <!--                :defaultExpandParent="true"-->
+          <!--                @select="onSelect"-->
+          <!--                @rightClick="onRightClick"-->
+          <!--            ></a-tree>-->
+          <!--            <div :style="tmpStyle" v-if="NodeTreeItem">-->
+          <!--              <div class="menu-item" @click="orgAdd">-->
+          <!--                <a-tooltip placement="bottom" title="新增子组织">-->
+          <!--                  <a-icon type="plus-circle-o" />-->
+          <!--                </a-tooltip>-->
+          <!--              </div>-->
+          <!--              <div class="menu-item" @click="orgEdit">-->
+          <!--                <a-tooltip placement="bottom" title="修改">-->
+          <!--                  <a-icon type="edit" />-->
+          <!--                </a-tooltip>-->
+          <!--              </div>-->
+          <!--              <div class="menu-item" @click="orgDelete" v-if="NodeTreeItem.parentOrgId">-->
+          <!--                <a-tooltip placement="bottom" title="删除">-->
+          <!--                  <a-icon type="minus-circle-o" />-->
+          <!--                </a-tooltip>-->
+          <!--              </div>-->
+          <!--            </div>-->
+          <!--          </a-card>-->
+        </div>
       </div>
-
-
-
-      <div>
-        <a-form-model layout="inline" :model="Type2Data" :rules="rules1" ref="ruleForm2">
-          <a-form-model-item  prop="pid">
-            <a-select  style="width: 150px" placeholder="请选择工作大类" v-model="Type2Data.pid" >
-              <a-select-option  v-for="(item,index) in type1List" :value="item.id" :key="index">
-                {{ item.description }}
-              </a-select-option>
-            </a-select>
-          </a-form-model-item>
-
-          <a-form-model-item prop="description">
-            <a-input v-model="Type2Data.description" placeholder="请输入工作子类"/>
-          </a-form-model-item>
-
-          <a-form-model-item>
-            <a-button style="margin-right: 10px" @click="Type2AddHandleOk" type="primary">
-              添加工作子类
-            </a-button>
-          </a-form-model-item>
-        </a-form-model>
-      </div>
-
 
 
     </div>
@@ -52,6 +87,7 @@ import {addWorkType} from '../api/sysdic'
 import {getWorkType1, getWorkType2} from "@/components/api/worklog";
 
 export default {
+
   name: "sysDic",
   created() {
     this.getWorkType1Handler()
@@ -78,6 +114,9 @@ export default {
       },
       type1List: [],
 
+      NodeTreeItem: null, // 右键菜单
+      tmpStyle: '',
+      treeData: [],
     };
   },
 
@@ -134,18 +173,75 @@ export default {
       getWorkType1().then(res => {
         if (res.data.flag) {
           this.type1List = res.data.data.type_list
+          for (let i = 0; i < res.data.data.type_list.length; i++) {
+            let params = {
+              pid: res.data.data.type_list[i].id
+            }
+            this.treeData.push({
+              title: res.data.data.type_list[i].description,
+              key: res.data.data.type_list[i].id,
+              children: []
+            })
+            getWorkType2(params).then(resc => {
+              if (resc.data.flag) {
+                for (let c = 0; c < resc.data.data.type_list.length; c++) {
+                  if (res.data.data.type_list[i].id === resc.data.data.type_list[c].pid) {
+                    this.treeData[i].children.push({
+                      title: resc.data.data.type_list[c].description,
+                      key: resc.data.data.type_list[c].id,
+                    })
+                  }
+                }
+              }
+            })
+
+          }
         }
       })
     },
 
 
-    addWorkLogType1Change() {
-      let params = {
-        pid: this.form.id
-      }
-
-      // this.getWorkType2Handler(params)
-    },
+    // onSelect (selectedKeys, info) {
+    //   this.queryParam = {
+    //     orgId: selectedKeys[0]
+    //   };
+    //   // 写自己的业务逻辑
+    //   // this.$refs.table.refresh(true);
+    // },
+    // onRightClick ({ event, node }) {
+    //   const x =
+    //       event.currentTarget.offsetLeft + event.currentTarget.clientWidth;
+    //   const y = event.currentTarget.offsetTop;
+    //   this.NodeTreeItem = {
+    //     pageX: x,
+    //     pageY: y,
+    //     id: node._props.eventKey,
+    //     title: node._props.title,
+    //     parentOrgId: node._props.dataRef.parentOrgId || null
+    //   };
+    //   this.tmpStyle = {
+    //     position: 'absolute',
+    //     maxHeight: 40,
+    //     textAlign: 'center',
+    //     left: `${x + 10 - 0}px`,
+    //     top: `${y + 6 - 0}px`,
+    //     display: 'flex',
+    //     flexDirection: 'row'
+    //   };
+    // },
+    // // 用于点击空白处隐藏增删改菜单
+    // clearMenu () {
+    //   // this.NodeTreeItem = null;
+    // },
+    // orgAdd () {
+    //   // 写自己的业务逻辑
+    // },
+    // orgEdit () {
+    //   // 写自己的业务逻辑
+    // },
+    // orgDelete () {
+    //   // 写自己的业务逻辑
+    // }
   }
 }
 </script>
