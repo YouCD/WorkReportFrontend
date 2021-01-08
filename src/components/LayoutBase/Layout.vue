@@ -27,22 +27,22 @@
       <a-layout-content :style="{ margin: '24px 16px 0' }">
 
         <!--面包屑-->
-        <div :style="{ padding: '24px', background: '#fff', }">
-          <template>
-            <a-breadcrumb class="breadcrumb">
-              <a-breadcrumb-item v-for="(item, index) in breadList" :key="item.name">
-                <router-link
-                  v-if="item.name != name && index != 1"
-                  :to="{ path: item.path === '' ? '/' : item.path }"
-                >{{ item.meta.title }}</router-link>
-                <span v-else>{{ item.meta.title }}</span>
-                {{ item.name }}
-              </a-breadcrumb-item>
-            </a-breadcrumb>
+<!--        <div :style="{ padding: 'px', background: '#fff', }">-->
+<!--          <template>-->
+<!--            <a-breadcrumb class="breadcrumb">-->
+<!--              <a-breadcrumb-item v-for="(item, index) in breadList" :key="item.name">-->
+<!--                <router-link-->
+<!--                  v-if="item.name != name && index != 1"-->
+<!--                  :to="{ path: item.path === '' ? '/' : item.path }"-->
+<!--                >{{ item.meta.title }}</router-link>-->
+<!--                <span v-else>{{ item.meta.title }}</span>-->
+<!--                {{ item.name }}-->
+<!--              </a-breadcrumb-item>-->
+<!--            </a-breadcrumb>-->
 
-          </template>
+<!--          </template>-->
 
-        </div>
+<!--        </div>-->
 
         <div :style="{ padding: '12px', background: '#fff', minHeight: '790px' }">
           <router-view :key="$route.fullPath"/>

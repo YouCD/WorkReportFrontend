@@ -45,3 +45,41 @@ export function modifyWorkLog(params) {
         method: 'PUT',
     })
 }
+export function getWorkLogFromType(params) {
+    return request({
+        url: '/w/workLogFromType',
+        params: params,
+        method: 'GET',
+    })
+}
+
+export function getWorkLogFromWeek() {
+    return request({
+        url: '/w/workLogFromWeek',
+        method: 'GET',
+    })
+}
+
+export function getWorkLogFromMonth() {
+    return request({
+        url: '/w/workLogFromMonth',
+        method: 'GET',
+    })
+}
+
+export function getWorkLogFromContent(params) {
+    return request({
+        url: '/w/workLogFromContent',
+        params: params,
+        method: 'GET',
+    })
+}
+
+export function getWorkLogFromDate(params) {
+    return request({
+        url: '/w/workLogFromDate',
+        params: params,
+        method: 'GET',
+    })
+}
+

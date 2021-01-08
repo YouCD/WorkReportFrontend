@@ -16,7 +16,6 @@ const router = new Router({
             meta: {needLogin: false},
         },
 
-
         {
             path: '/',
             name: 'workLog',
@@ -24,24 +23,18 @@ const router = new Router({
             meta: {needLogin: true, title: 'workLog'},
             children: [
                 // {
-                //     path: '/workLogAdd',
-                //     name: 'Roles',
-                //     component: () => import(/* webpackChunkName: "seal" */ "@/components/workLog/workLogList.vue"),
-                //     meta: {needLogin: true, title: 'Roles'}
+                //     path: '/',
+                //     name: 'home',
+                //     component: () => import(/* webpackChunkName: "seal" */ "@/components/home/home.vue"),
+                //     meta: {needLogin: true, title: 'home'}
                 // },
                 {
                     path: '/workLogList',
-                    name: 'Roles',
+                    name: 'workLogList',
                     component: () => import(/* webpackChunkName: "seal" */ "@/components/workLog/workLogList.vue"),
                     meta: {needLogin: true, title: 'workLogList'}
                 },
 
-                // {
-                //     path: '/rbac/user',
-                //     name: 'User',
-                //     component: () => import(/* webpackChunkName: "seal" */ "@/components/Rbac/User.vue"),
-                //     meta: {needLogin: true, title: 'User'}
-                // },
             ]
         },
         {
@@ -50,25 +43,12 @@ const router = new Router({
             component: Layout,
             meta: {needLogin: true, title: 'sys'},
             children: [
-                // {
-                //     path: '/workLogAdd',
-                //     name: 'Roles',
-                //     component: () => import(/* webpackChunkName: "seal" */ "@/components/workLog/workLogList.vue"),
-                //     meta: {needLogin: true, title: 'Roles'}
-                // },
                 {
                     path: '/sys/sysDic',
                     name: 'sysDic',
                     component: () => import(/* webpackChunkName: "seal" */ "@/components/sys/sysDic.vue"),
-                    meta: {needLogin: true, title: 'workLogList'}
+                    meta: {needLogin: true, title: 'sysDic'}
                 },
-
-                // {
-                //     path: '/rbac/user',
-                //     name: 'User',
-                //     component: () => import(/* webpackChunkName: "seal" */ "@/components/Rbac/User.vue"),
-                //     meta: {needLogin: true, title: 'User'}
-                // },
             ]
         },
 

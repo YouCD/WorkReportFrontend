@@ -39,8 +39,6 @@
           </div>
         </div>
         <div style="max-height: 80vh;overflow-y: auto;width: 25%">
-
-
           <a-card :bordered="false" @click="clearMenu" class="card-box">
             <a-tree
                 v-if="treeData.length>0"
