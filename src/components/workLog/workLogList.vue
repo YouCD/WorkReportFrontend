@@ -55,14 +55,9 @@
             </a-button>
           </a-form-model-item>
           <a-form-model-item prop="date">
-            <a-radio-group button-style="solid" @change="getWeekChange">
-              <a-radio-button value="week">
-                本周日志
-              </a-radio-button>
-              <!--              <a-radio-button  value="month">-->
-              <!--                本月日志-->
-              <!--              </a-radio-button>-->
-            </a-radio-group>
+            <a-button type="primary" value="week" @click="getWeekChange">
+              本周日志
+            </a-button>
           </a-form-model-item>
         </a-form-model>
 
@@ -100,7 +95,7 @@
         </a-form-model>
       </div>
       <div style="padding-top: 15px">
-        <a-table :columns="columns" :data-source="data" :rowKey='(record,index)=> index' :loading="loading"
+        <a-table v-if="showTable" :columns="columns" :data-source="data" :rowKey='(record,index)=> index' :loading="loading"
                  size="small">
 
 
@@ -117,7 +112,11 @@
               </a-popconfirm>
         </span>
         </a-table>
-
+        <div v-if="!showTable">
+          <div v-for="(item,i) in weekData" :key="i">
+            {{i}}:<br/><div v-for="(item1,i1) in item" :key="i1" >{{kg}}{{i1+1}}.{{item1}}</div>
+          </div>
+        </div>
         <a-modal v-model="addWorkLog" title="添加工作日志" @ok="addWorkLogHandler" cancelText="取消" okText="确认">
           <a-form-model :model="form" :label-col="labelCol" :wrapper-col="wrapperCol" :rules="rules" ref="ruleForm">
             <a-form-model-item label="日期" prop="date">
@@ -281,6 +280,11 @@ export default {
         content: undefined,
         date: undefined,
       },
+
+
+      weekData:undefined,
+      showTable:true,
+      kg:"\u3000\u3000\u3000",
     };
   },
   methods: {
@@ -532,11 +536,12 @@ export default {
 
 
     getWeekChange(e) {
+      this.showTable = !this.showTable
       if (e.target.value === "week") {
         getWorkLogFromWeek().then(res => {
           if (res.data.flag) {
-            this.data = []
-            this.data = res.data.data.work_content_resp_list
+            this.weekData = []
+            this.weekData = res.data.data
           } else if (res.data.flag !== true) {
             this.$message.error(res.data.msg)
           }
@@ -573,5 +578,8 @@ export default {
 </script>
 
 <style scoped>
+  .white-space {
+    white-space:pre
 
+  }
 </style>
