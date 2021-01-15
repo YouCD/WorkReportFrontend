@@ -4,16 +4,16 @@
       collapsed-width="0"
       @collapse="onCollapse"
       @breakpoint="onBreakpoint"
-      style="flex: 1;min-width:210px"
+
   >
-    <div style="width: 250px;height: 50px;padding-left: 20px;margin-bottom: 10px">
-      <div id="logoImage">
+    <div style="padding-left: 20px;margin-bottom: 10px">
+      <div>
         <!--        <img src="./logo.png" alt="logo">-->
         <div style="display:inline-block; color: white;font-size: 25px;padding-top:20px">工作日志</div>
       </div>
 
     </div>
-    <a-menu theme="dark" mode="inline" style="width: auto" :default-selected-keys="['4']">
+    <a-menu theme="dark" mode="inline" style="width: auto" >
       <a-menu-item key="1">
         <!--        <MyIcon type='icon-home'></MyIcon>-->
         <!--        <span class="nav-text">Home</span>-->

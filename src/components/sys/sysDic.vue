@@ -2,9 +2,9 @@
   <div>
     <div>
       <div>
-        <div>
-          <div style="float: left">
-            <a-form-model layout="inline" :model="Type1Data" :rules="rules" ref="ruleForm">
+        <div style="margin-bottom: 50px">
+          <div :style="styleHandler">
+            <a-form-model :layout="layout" :model="Type1Data" :rules="rules" ref="ruleForm">
               <a-form-model-item prop="Type1">
                 <a-input v-model="Type1Data.Type1" placeholder="请输入工作大类"/>
               </a-form-model-item>
@@ -16,8 +16,8 @@
               </a-form-model-item>
             </a-form-model>
           </div>
-          <div>
-            <a-form-model layout="inline" :model="Type2Data" :rules="rules1" ref="ruleForm2">
+          <div >
+            <a-form-model :layout="layout" :model="Type2Data" :rules="rules1" ref="ruleForm2">
               <a-form-model-item prop="pid">
                 <a-select style="width: 150px" placeholder="请选择工作大类" v-model="Type2Data.pid">
                   <a-select-option v-for="(item,index) in type1List" :value="item.id" :key="index">
@@ -38,7 +38,7 @@
             </a-form-model>
           </div>
         </div>
-        <div style="max-height: 80vh;overflow-y: auto;width: 25%">
+        <div style="max-height: 80vh;overflow-y: auto;width: 25%;padding-top: 10px;">
           <a-card :bordered="false" @click="clearMenu" class="card-box">
             <a-tree
                 v-if="treeData.length>0"
@@ -138,6 +138,9 @@ export default {
       labelCol: {span: 5},
       wrapperCol: {span: 18},
 
+
+      layout:undefined,
+      styleHandler:undefined,
     };
   },
 
@@ -304,8 +307,31 @@ export default {
           return false;
         }
       });
-    }
-  }
+    },
+
+
+    isMobile() {
+      let flag = navigator.userAgent.match(/(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i);
+      return flag;
+    },
+    layoutHandler(){
+      if(!this.isMobile()){
+        this.layout= "inline"
+        this.is_Mobile= false
+        this.styleHandler= "float: left"
+
+      }else if (this.isMobile()){
+        this.layout= "horizontal"
+
+      }
+    },
+
+  },
+
+  mounted() {
+    this.layoutHandler()
+
+  },
 }
 </script>
 
