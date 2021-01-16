@@ -23,7 +23,7 @@
             <span>{{uid}}</span>
           </span>
 
-            </div>
+                </div>
             </a-layout-header>
             <a-layout-content :style="{ margin: '24px 16px 0' }">
                 <div :style="{ padding: '12px', background: '#fff', minHeight: '790px' ,height:'100%'}">
@@ -32,7 +32,7 @@
 
             </a-layout-content>
             <a-layout-footer style="text-align: center">
-                Ant Design ©2018 Created by Ant UED
+                WorkLogSystem ©2021 Created by YouCD
             </a-layout-footer>
         </a-layout>
     </a-layout>

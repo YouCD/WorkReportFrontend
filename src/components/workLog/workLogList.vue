@@ -53,7 +53,7 @@
 
                 <a-form-model :layout="layout" :model="searchForm">
 
-                    <a-form-model-item style="padding-right: 50px">
+                    <a-form-model-item v-if="!showWorkType" style="padding-right: 50px">
                         <a-button type="primary" @click="showDrawer">
                             工作类别
                         </a-button>
@@ -325,6 +325,7 @@
                 visible: false,
                 layout: undefined,
                 is_Mobile: false,
+                showWorkType: false,
                 showSearch: false,
                 showAddWorkLog: false,
             };
@@ -641,6 +642,7 @@
                 } else if (this.isMobile()) {
                     this.layout = "horizontal"
                     this.is_Mobile = true
+                    this.showWorkType = true
                 }
             },
 

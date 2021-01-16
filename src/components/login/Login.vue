@@ -12,26 +12,14 @@
                 @submit="handleSubmit"
         >
             <a-form-item>
-                <a-input
-                        v-decorator="[
-          'username',
-          { rules: [{ required: true, message: '请输入用户名' }] },
-        ]"
-                        placeholder="用户名：邮箱前缀"
-                >
+                <a-input v-decorator="['username',{ rules: [{ required: true, message: '请输入用户名' }] },]"
+                         placeholder="用户名：邮箱前缀">
                     <a-icon slot="prefix" type="user" style="color: rgba(0,0,0,.25)"/>
                 </a-input>
             </a-form-item>
             <a-form-item>
-                <a-input-password
-                        v-decorator="[
-          'password',
-          { rules: [{ required: true, message: '请输入密码' }] },
-        ]"
-                        type="password"
-                        placeholder="请输入密码"
-                >
-
+                <a-input-password v-decorator="['password',{ rules: [{ required: true, message: '请输入密码' }] },]"
+                                  type="password" placeholder="请输入密码">
                     <a-icon slot="prefix" type="lock" style="color: rgba(0,0,0,.25)"/>
                 </a-input-password>
             </a-form-item>

@@ -4,17 +4,19 @@ import request from "../utils/request"
 export function getWorkType1(params) {
     return request({
         url: '/w/workType1',
-        params:params,
+        params: params,
         method: 'GET',
     })
 }
+
 export function getWorkType2(params) {
     return request({
         url: '/w/workType2',
-        params:params,
+        params: params,
         method: 'GET',
     })
 }
+
 export function addWorkLog(params) {
     return request({
         url: '/w/workLog',
@@ -30,6 +32,7 @@ export function getWorkLog(params) {
         method: 'GET',
     })
 }
+
 export function delWorkLog(params) {
     return request({
         url: '/w/workLog',
@@ -45,6 +48,7 @@ export function modifyWorkLog(params) {
         method: 'PUT',
     })
 }
+
 export function getWorkLogFromType(params) {
     return request({
         url: '/w/workLogFromType',
