@@ -38,16 +38,17 @@
 
 
         <div>
-            <a-button style="display: inline-block;margin-right: 10px" v-if="is_Mobile" type="primary"
-                      @click="MobileSearch">
+            <a-button size="small" style="display: inline-block;margin-right: 10px" v-if="is_Mobile" type="primary" @click="MobileSearch">
                 展开搜索
             </a-button>
-            <a-button style="display: inline-block;margin-right: 10px" v-if="is_Mobile" type="primary"
-                      @click="MobileAddWorkLog">
+            <a-button size="small" style="display: inline-block;margin-right: 10px" v-if="is_Mobile" type="primary" @click="MobileAddWorkLog">
                 添加日志
             </a-button>
-            <a-button v-if="is_Mobile" type="primary" @click="showDrawer">
+            <a-button size="small" style="display: inline-block;margin-right: 10px" v-if="is_Mobile" type="primary" @click="showDrawer">
                 工作类别
+            </a-button>
+            <a-button size="small" v-if="is_Mobile" type="primary"  @click="getWeekChange">
+                本周日志
             </a-button>
             <div v-if="showSearch">
 
@@ -73,8 +74,8 @@
                             搜索
                         </a-button>
                     </a-form-model-item>
-                    <a-form-model-item prop="date">
-                        <a-button type="primary" value="week" @click="getWeekChange">
+                    <a-form-model-item v-if="!is_Mobile" prop="date">
+                        <a-button type="primary" @click="getWeekChange">
                             本周日志
                         </a-button>
                     </a-form-model-item>
@@ -580,10 +581,11 @@
             },
 
 
-            getWeekChange(e) {
+            getWeekChange() {
                 this.showTable = !this.showTable
-                if (e.target.value === "week") {
-                    getWorkLogFromWeek().then(res => {
+                this.showSearch = false
+                this.showAddWorkLog = false
+                getWorkLogFromWeek().then(res => {
                         if (res.data.flag) {
                             this.weekData = []
                             this.weekData = res.data.data
@@ -591,7 +593,7 @@
                             this.$message.error(res.data.msg)
                         }
                     })
-                }
+
             },
             searchFormHandler() {
                 if (this.searchForm.date === undefined) {
@@ -648,9 +650,11 @@
 
 
             MobileSearch() {
+                this.showAddWorkLog = false
                 this.showSearch = !this.showSearch
             },
             MobileAddWorkLog() {
+                this.showSearch = false
                 this.showAddWorkLog = !this.showAddWorkLog
             }
 
