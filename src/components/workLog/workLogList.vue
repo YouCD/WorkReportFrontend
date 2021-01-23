@@ -38,16 +38,19 @@
 
 
         <div>
-            <a-button size="small" style="display: inline-block;margin-right: 10px" v-if="is_Mobile" type="primary" @click="MobileSearch">
+            <a-button size="small" style="display: inline-block;margin-right: 10px" v-if="is_Mobile" type="primary"
+                      @click="MobileSearch">
                 展开搜索
             </a-button>
-            <a-button size="small" style="display: inline-block;margin-right: 10px" v-if="is_Mobile" type="primary" @click="MobileAddWorkLog">
+            <a-button size="small" style="display: inline-block;margin-right: 10px" v-if="is_Mobile" type="primary"
+                      @click="MobileAddWorkLog">
                 添加日志
             </a-button>
-            <a-button size="small" style="display: inline-block;margin-right: 10px" v-if="is_Mobile" type="primary" @click="showDrawer">
+            <a-button size="small" style="display: inline-block;margin-right: 10px" v-if="is_Mobile" type="primary"
+                      @click="showDrawer">
                 工作类别
             </a-button>
-            <a-button size="small" v-if="is_Mobile" type="primary"  @click="getWeekChange">
+            <a-button size="small" v-if="is_Mobile" type="primary" @click="MobileGetWeekChange">
                 本周日志
             </a-button>
             <div v-if="showSearch">
@@ -583,17 +586,27 @@
 
             getWeekChange() {
                 this.showTable = !this.showTable
+                getWorkLogFromWeek().then(res => {
+                    if (res.data.flag) {
+                        this.weekData = []
+                        this.weekData = res.data.data
+                    } else if (res.data.flag !== true) {
+                        this.$message.error(res.data.msg)
+                    }
+                })
+            },
+            MobileGetWeekChange() {
+                this.showTable = !this.showTable
                 this.showSearch = false
                 this.showAddWorkLog = false
                 getWorkLogFromWeek().then(res => {
-                        if (res.data.flag) {
-                            this.weekData = []
-                            this.weekData = res.data.data
-                        } else if (res.data.flag !== true) {
-                            this.$message.error(res.data.msg)
-                        }
-                    })
-
+                    if (res.data.flag) {
+                        this.weekData = []
+                        this.weekData = res.data.data
+                    } else if (res.data.flag !== true) {
+                        this.$message.error(res.data.msg)
+                    }
+                })
             },
             searchFormHandler() {
                 if (this.searchForm.date === undefined) {

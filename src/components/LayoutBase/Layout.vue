@@ -4,25 +4,26 @@
         <a-layout>
             <a-layout-header :style="{ background: '#fff', padding: 0 }">
                 <div style="padding: 0px 23px">
-          <span style="float:right">
-            <span>
-              <a-dropdown>
-                <a-avatar style="background-color:#87d068" icon="user" class="ant-dropdown-link"
-                          @click="e => e.preventDefault()">
-                </a-avatar>
-                <a-menu slot="overlay">
-                  <a-menu-item key="0">
-                    <a target="_blank" @click="logout" rel="noopener noreferrer">登出</a>
-                  </a-menu-item>
-                  <a-menu-item key="1">
-                    <a href="http://cucurbitcable.dlab.cn/#/updatepassword">修改密码</a>
-                  </a-menu-item>
-                </a-menu>
-              </a-dropdown>
-            </span>
-            <span>{{uid}}</span>
-          </span>
 
+                  <div style="float:right">
+                    <span>
+                      <a-dropdown>
+                        <a-avatar style="background-color:#87d068" icon="user" class="ant-dropdown-link"
+                                  @click="e => e.preventDefault()">
+                        </a-avatar>
+                        <a-menu slot="overlay">
+                          <a-menu-item key="0">
+                            <a target="_blank" @click="logout" rel="noopener noreferrer">登出</a>
+                          </a-menu-item>
+                        </a-menu>
+                      </a-dropdown>
+                    </span>
+                    <span>{{uid}}</span>
+                  </div>
+<!--                    <a v-if="msg.flag" style="float:right;padding-right: 20px" :href="msg.data.download_url">{{msg.msg}}</a>-->
+                    <a v-if="showUpdate" style="float:right;padding-right: 20px" @click="UpdateHandler" >{{msg}}</a>
+                    <a v-if="!showUpdate" style="float:right;padding-right: 20px"  >{{msg}}</a>
+<!--                    <msg :lists="msg" style="float:right;padding-right: 20px"></msg>-->
                 </div>
             </a-layout-header>
             <a-layout-content :style="{ margin: '24px 16px 0' }">
@@ -39,13 +40,20 @@
 </template>
 <script>
     import Sider from '@/components/LayoutBase/Sider'
-    import {Logout} from '../api/user'
 
+    import {UpdateCheck,Update} from "@/components/api/user";
+    // import msg from '@/components/LayoutBase/msg'
     export default {
         data() {
             return {
                 uid: "我是谁？",
-                breadList: []
+                breadList: [],
+                updateUrl:"",
+
+
+                msg:undefined,
+                showUpdate:false,
+
             }
         },
         name: "layout",
@@ -60,9 +68,55 @@
                 this.uid = localStorage.getItem("uid")
             },
             logout() {
-                // Logout()
                 this.$router.push('/login')
             },
+
+            UpdateCheckHandler() {
+
+                UpdateCheck().then(res => {
+                    if (res.data.flag) {
+                        this.msg=res.data.msg
+                        this.showUpdate=res.data.flag
+                    }else if(!res.data.flag){
+                        this.msg=res.data.msg
+                        this.showUpdate=res.data.flag
+                    }
+                })
+            },
+            UpdateHandler() {
+                Update().then(res => {
+                    if (!res.data.flag) {
+                        this.msg=res.data.msg
+                    }
+                })
+
+                window.setInterval(() => {
+                    setTimeout(this.LoopUpdateHandler(), 0);
+                }, 3000);
+          },
+
+
+            LoopUpdateHandler() {
+                let params={
+                    method:"loop_check"
+                }
+                Update(params).then(res => {
+                    if (!res.data.flag) {
+                        console.log("上",this.msg)
+                        this.msg=res.data.msg
+                    }else if (res.data.flag){
+                        console.log("下",this.msg)
+                        this.msg=res.data.msg
+                        this.showUpdate=!res.data.flag
+
+                    }
+                })
+            },
+
+
+
+
+
             getBreadcrumb() {
                 this.breadList = []
                 // console.log("this.$route.meta",this.$route.meta)
@@ -93,7 +147,7 @@
         created() {
             this.localStorageUID()
             this.getBreadcrumb()
-
+            this.UpdateCheckHandler()
         },
 
         watch: {
@@ -102,7 +156,10 @@
             },
         },
 
-        components: {Sider}
+        components: {
+            Sider,
+            // msg
+        }
     };
 </script>
 

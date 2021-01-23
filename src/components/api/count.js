@@ -8,10 +8,10 @@ export function getType1Count() {
     })
 }
 
-export function getType2Count(params) {
+export function getType2Count(type1) {
     return request({
         url: '/w/type2Count',
-        params: params,
+        params: {id:type1},
         method: 'GET',
     })
 }
