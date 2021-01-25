@@ -87,3 +87,12 @@ export function getWorkLogFromDate(params) {
     })
 }
 
+export function downloadWorklog(params) {
+    return request({
+        url: '/w/downloadWorklog',
+        params: params,
+        method: 'GET',
+        responseType: 'blob'
+    })
+}
+
