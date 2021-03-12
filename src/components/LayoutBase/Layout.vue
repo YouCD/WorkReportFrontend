@@ -41,7 +41,7 @@
 <script>
 import Sider from '@/components/LayoutBase/Sider'
 
-import {Update, UpdateCheck} from "@/components/api/user";
+import {UpdateCheck} from "@/components/api/worklog";
 // import msg from '@/components/LayoutBase/msg'
 export default {
   data() {
@@ -119,10 +119,22 @@ export default {
 
     initWebSocket() { //初始化weosocket
       let wsUrl=undefined
-      if(process.env.VUE_APP_API_ROOT){
-       wsUrl = "ws://"+process.env.VUE_APP_API_ROOT.split("//")[1]+"/update";
+      let protocol=undefined
 
+      if (window.location.protocol==="http:"){
+        protocol="ws://"
+      }else if (window.location.protocol==="https:"){
+        protocol="wss://"
       }
+
+      if(process.env.VUE_APP_API_ROOT){
+        wsUrl = protocol+process.env.VUE_APP_API_ROOT.split("//")[1]+"/w/update";
+
+      }else {
+        wsUrl=protocol+window.location.host+"/w/update"
+      }
+      // wsUrl="ws://"+window.location.host+"/w/update"
+
       // console.log(process.env.VUE_APP_API_ROOT.split("//")[1])
       this.websock = new WebSocket(wsUrl);
 

@@ -96,3 +96,9 @@ export function downloadWorklog(params) {
     })
 }
 
+export function UpdateCheck() {
+    return request({
+        url: '/w/updateCheck',
+        method: 'GET',
+    })
+}
