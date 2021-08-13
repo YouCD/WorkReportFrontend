@@ -71,7 +71,7 @@
 
 
           <a-form-model-item label="日期">
-            <a-date-picker v-model="searchForm.date" :locale="locale"/>
+            <a-date-picker :disabled='showSearchDate'  v-model="searchForm.date" :locale="locale"/>
           </a-form-model-item>
 
 
@@ -339,7 +339,7 @@ export default {
       treeDataType1List: [],
 
       searchForm: {
-        content: undefined,
+        content: "",
         date: undefined,
       },
 
@@ -369,15 +369,32 @@ export default {
       },
       backUrl: "/w/downloadWorklog",
 
+      showSearchDate: false,
+
       isSelectDrawer: false,
       DrawerKey: undefined,
     };
   },
-  // watch: {
+   watch: {
   //   DrawerKey: function (val) {
   //     this.pageInfo.pageIndex =1
   //   },
-  // },
+ 
+     searchForm: {    
+       handler(newName, oldName) {    
+         if(newName.content==""){    
+           this.showSearchDate=false;    
+//           console.log(newName, oldName)    
+         }else if(newName.content!=="") { 
+           this.showSearchDate=true;    
+         }    
+           console.log("AAA",newName)    
+           console.log("VVVV",oldName)    
+       },    
+       deep: true,    
+     },    
+
+  },
   methods: {
     moment,
     getCurrentData() {
@@ -500,14 +517,18 @@ export default {
     },
 
     handleTableChange(page, pageSize) {
-      this.pageInfo.pageSize = page.pageSize;
-      this.pageInfo.pageIndex = page.current;
+      if (this.searchForm.content==""){
+        this.pageInfo.pageSize = page.pageSize;
+        this.pageInfo.pageIndex = page.current;
+      }else if (this.searchForm.content!==""){
+        this.searchFormHandler()
+      }
 
       if (this.isSelectDrawer) {
         this.getWorkLogFromTypeHandler(this.DrawerKey)
-      } else {
-        this.getWorkLogHandler()
-      }
+      } 
+       
+      
 
     },
 
@@ -633,7 +654,7 @@ export default {
           this.data = []
           this.data = res.data.data.work_content_resp_list
           this.pagination.total = res.data.data.sum
-          this.$message.info("刷新页面重置当前的筛选状态。")
+          //this.$message.info("刷新页面重置当前的筛选状态。")
         } else if (res.data.flag !== true) {
           this.$message.error(res.data.msg)
         }
@@ -666,16 +687,17 @@ export default {
       })
     },
     searchFormHandler() {
-      if (this.searchForm.date === undefined) {
+      if (this.searchForm.date === undefined||this.searchForm.content!=="") {
         this.showTable = true
         getWorkLogFromContent(this.searchForm).then(res => {
           if (res.data.flag) {
             this.data = res.data.data.work_content_resp_list
+            this.pagination.total = res.data.data.sum
           } else if (res.data.flag !== true) {
             this.$message.error(res.data.msg)
           }
         })
-      } else if (this.searchForm.content === undefined) {
+      } else if (this.searchForm.content=="") {
         let params = {
           date: this.searchForm.date.startOf('day').unix(),
         }
@@ -687,7 +709,6 @@ export default {
           }
         })
       }
-
     },
 
     afterVisibleChange(val) {
