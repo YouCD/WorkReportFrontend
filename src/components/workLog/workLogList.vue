@@ -71,7 +71,7 @@
 
 
           <a-form-model-item label="日期">
-            <a-date-picker :disabled='showSearchDate'  v-model="searchForm.date" :locale="locale"/>
+            <a-date-picker :disabled='showSearchDate' v-model="searchForm.date" :locale="locale"/>
           </a-form-model-item>
 
 
@@ -375,24 +375,22 @@ export default {
       DrawerKey: undefined,
     };
   },
-   watch: {
-  //   DrawerKey: function (val) {
-  //     this.pageInfo.pageIndex =1
-  //   },
- 
-     searchForm: {    
-       handler(newName, oldName) {    
-         if(newName.content==""){    
-           this.showSearchDate=false;    
-//           console.log(newName, oldName)    
-         }else if(newName.content!=="") { 
-           this.showSearchDate=true;    
-         }    
-           console.log("AAA",newName)    
-           console.log("VVVV",oldName)    
-       },    
-       deep: true,    
-     },    
+  watch: {
+    //   DrawerKey: function (val) {
+    //     this.pageInfo.pageIndex =1
+    //   },
+
+    searchForm: {
+      handler(newName, oldName) {
+        if (newName.content == "") {
+          this.showSearchDate = false;
+        } else if (newName.content !== "") {
+          this.showSearchDate = true;
+        }
+
+      },
+      deep: true,
+    },
 
   },
   methods: {
@@ -517,18 +515,16 @@ export default {
     },
 
     handleTableChange(page, pageSize) {
-      if (this.searchForm.content==""){
+      if (this.searchForm.content == "") {
         this.pageInfo.pageSize = page.pageSize;
         this.pageInfo.pageIndex = page.current;
-      }else if (this.searchForm.content!==""){
+        this.getWorkLogHandler()
+      } else if (this.searchForm.content !== "") {
         this.searchFormHandler()
       }
-
       if (this.isSelectDrawer) {
         this.getWorkLogFromTypeHandler(this.DrawerKey)
-      } 
-       
-      
+      }
 
     },
 
@@ -580,7 +576,6 @@ export default {
 
 
     onSelect(selectedKeys, info) {
-
 
 
       this.DrawerKey = selectedKeys[0]
@@ -687,7 +682,7 @@ export default {
       })
     },
     searchFormHandler() {
-      if (this.searchForm.date === undefined||this.searchForm.content!=="") {
+      if (this.searchForm.date === undefined || this.searchForm.content !== "") {
         this.showTable = true
         getWorkLogFromContent(this.searchForm).then(res => {
           if (res.data.flag) {
@@ -697,7 +692,7 @@ export default {
             this.$message.error(res.data.msg)
           }
         })
-      } else if (this.searchForm.content=="") {
+      } else if (this.searchForm.content == "") {
         let params = {
           date: this.searchForm.date.startOf('day').unix(),
         }
