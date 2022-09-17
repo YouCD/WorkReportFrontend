@@ -67,7 +67,9 @@ const router = new Router({
 router.beforeEach((to, from, next) => {
     // 每次切换页面时，调用进度条
     NProgress.start();
-
+    if (to.path==="/"){
+        next({path:"/home"})
+    }
     // 这个一定要加，没有next()页面不会跳转的。这部分还不清楚的去翻一下官网就明白了
     next();
     if (to.meta.needLogin) {
