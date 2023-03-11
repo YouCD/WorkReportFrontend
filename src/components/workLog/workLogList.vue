@@ -115,7 +115,7 @@
             </a-select>
           </a-form-model-item>
           <a-form-model-item label="工作内容" prop="content">
-            <a-input style="width: 100%" v-model="form.content"/>
+            <a-textarea style="width: 100%" @keydown.native="Keydown" :autosize="true" v-model="form.content"/>
           </a-form-model-item>
           <a-form-model-item>
             <a-button type="primary" @click="addWorkLogHandler">
@@ -416,13 +416,23 @@ export default {
 
 
     addWorkLogType1Change() {
+      this.form.type2=undefined
       let params = {
         pid: this.form.type1
       }
       this.getWorkType2Handler(params)
     },
 
-
+    Keydown(e) {
+      if (!e.shiftKey && e.keyCode == 13) {
+        e.cancelBubble = true; //ie阻止冒泡行为
+        e.stopPropagation();//Firefox阻止冒泡行为
+        e.preventDefault(); //取消事件的默认动作*换行
+        //以下处理发送消息代码
+        // onSendMsg();
+        this.addWorkLogHandler()
+      }
+    },
     addWorkLogHandler() {
       this.showTable = true
       this.$refs.ruleForm.validate(valid => {
@@ -430,7 +440,7 @@ export default {
           let params = {
             type1: this.form.type1,
             type2: this.form.type2,
-            content: this.form.content,
+            content: this.form.content.substr(0, this.form.content.length - 1),
             date: this.form.date.startOf('day').unix(),
           }
           addWorkLog(params).then(res => {
